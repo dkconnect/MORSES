@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MORSES ::</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">MORSES ::</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Decoder</a></li>
+                <li><a href="history.html">History of Morse</a></li>
+                <li><a href="alphabets.html">Alphabets</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content-section">
+        <div class="title-text">
+            <h1>Write Something!</h1>
+            <p>You can also read the alphabet <a href="alphabets.html" class="green-link">here</a>.</p>
+        </div>
+
+        <div class="main-container">
+            <div class="input-section">
+                <div class="button-group">
+                    <button class="select-button blue-button active" data-mode="morse" aria-label="Morse to English">Morse</button>
+                    <button class="select-button blue-button" data-mode="english" aria-label="English to Morse">English</button>
+                </div>
+                <textarea id="inputText" placeholder="Enter Morse code (e.g., .... . .-.. .-.. ---)" aria-label="Input text for conversion"></textarea>
+            </div>
+            <div class="output-section">
+                <span class="output-label">Output</span>
+                <button class="copy-button" aria-label="Copy output text">
+                    <svg class="copy-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                    Copy
+                </button>
+                <textarea id="outputText" readonly aria-label="Converted output text"></textarea>
+            </div>
+        </div>
+        <div class="toast" id="toast"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logo">MORSES ::</div>
+        <div class="repository-button">
+            <button onclick="window.open('https://github.com)">
+                Repository
+            </button>
+        </div>
+        <p>Created by Lucifer</p>
+        <p>2025</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
