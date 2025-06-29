@@ -1,13 +1,13 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #2e2e2e; 
+    background-color: #2e2e2e;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    color: white; 
+    color: white;
 }
 .header-bg {
-    background-color: #2e2e2e; 
+    background-color: #2e2e2e;
 }
 .main-content-bg {
     background-color: #d1d5db;
@@ -16,23 +16,46 @@ body {
     background-color: #3b82f6;
     color: white;
     padding: 0.75rem 1.5rem;
-    border-radius: 9999px; 
+    border-radius: 9999px;
     font-weight: 500;
     transition: background-color 0.2s ease;
 }
 .btn-blue:hover {
-    background-color: #2563eb; 
+    background-color: #2563eb;
 }
 .btn-blue.active {
-    background-color: #1d4ed8; 
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+    background-color: #1d4ed8;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 .btn-blue.opacity-70 {
-    opacity: 0.7; 
+    opacity: 0.7;
 }
 .text-green-accent {
     color: #4ade80;
 }
 textarea {
-    resize: none; 
+    resize: none;
+}
+/* New CSS for smaller screens */
+@media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px, so this targets anything smaller */
+    .header-bg {
+        flex-direction: column;
+        align-items: center;
+    }
+    .header-bg nav ul {
+        margin-top: 1rem;
+    }
+    .main-content-bg {
+        padding: 1rem; /* Adjust padding for very small screens */
+    }
+    .main-content-bg > div { /* Apply padding to direct children of main-content-bg */
+        padding: 0.5rem;
+    }
+    .btn-blue {
+        padding: 0.6rem 1.2rem;
+    }
+    #copy-btn {
+        top: 1rem; /* Adjust position for copy button on small screens */
+        right: 1rem;
+    }
 }
