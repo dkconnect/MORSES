@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MORSES .:</title>
-    <link rel="icon" type="image/png" href="_.png"> 
+    <link rel="icon" type="image/png" href="_.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
     </header>
 
     <main class="flex-grow flex flex-col items-center justify-center p-4 md:p-8 lg:p-12">
-        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-white text-center text-shadow">Write Something</h1>
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-white text-center text-shadow">Write Something !</h1>
         <p class="text-lg md:text-xl lg:text-2xl mb-8 text-white text-center">
             Convert text to Morse code or vice versa. View the alphabet <a href="#" id="alphabet-link" class="text-green-accent hover:underline">here</a>.
         </p>
@@ -50,14 +50,12 @@
 
             <div class="lg:w-1/2 p-2 sm:p-4 flex flex-col mt-6 lg:mt-0 lg:ml-6 relative">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800">Output</h2>
-                <textarea id="output-textarea"
-                          class="flex-grow p-4 rounded-md border-2 border-gray-300 bg-white text-gray-900 text-lg transition-all"
-                          rows="10"
-                          readonly
-                          placeholder="Your converted text will appear here..."
-                          aria-label="Converted output text"></textarea>
+                <div id="output-textarea"
+                    class="flex-grow p-4 rounded-md border-2 border-gray-300 bg-white text-gray-900 text-lg transition-all overflow-auto"
+                    style="min-height: 10rem;"
+                    aria-label="Converted output text">Your converted text will appear here...</div>
                 <div class="flex space-x-4 mt-4">
-                    <button id="copy-btn" class="bg-gray-200 text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" aria-label="Copy output text">
+                    <button id="copy-btn" class="bg-gray-200 text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 relative" aria-label="Copy output text">
                         <i class="fas fa-copy text-lg"></i>
                     </button>
                     <button id="play-btn" class="bg-green-500 text-white p-2 rounded-full shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" aria-label="Play Morse code audio">
@@ -89,7 +87,7 @@ Z --..
 5 ..... 6 -.... 7 --... 8 ---.. 9 ----.
 
 . .-.-.-  , --..--  ? ..--..  ' .----.  ! -.-.--
-/ -..-.   ( -.--.   ) -.--.-  & .-...  : ---...
+/ -..-.   ( -.--.   ) -.--.-  & .-...   : ---...
 ; -.-.-.  = -...-   + .-.-.   - -....-  _ ..--.-
 " .-..-.  $ ...-..- @ .--.-.
             </pre>
