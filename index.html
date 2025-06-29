@@ -3,128 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MORSES .: Decoder</title>
-    <link rel="icon" type="image/png" href="_.png">
+    <title>MORSES .:</title>
+    <link rel="icon" type="image/png" href="_.png"> 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="flex flex-col min-h-screen">
-
+<body class="flex flex-col min-h-screen transition-colors duration-300" data-theme="dark">
     <header class="header-bg py-4 px-4 md:px-8 lg:px-12 flex justify-between items-center shadow-lg flex-wrap">
-        <div class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0">MORSES .:</div>
+        <div class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0 text-white">MORSES .:</div>
         <nav>
             <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6 md:space-x-8 text-base sm:text-lg font-medium">
-                <li><a href="#" class="text-green-accent hover:text-green-300">decoder</a></li>
-                <li><a href="#" class="text-white hover:text-gray-300">history of morse</a></li>
-                <li><a href="#" class="text-white hover:text-gray-300">alphabets</a></li>
+                <li><a href="#" class="text-green-accent hover:text-green-300 transition-colors">decoder</a></li>
+                <li><a href="#" class="text-white hover:text-gray-300 transition-colors">history of morse</a></li>
+                <li><a href="#" class="text-white hover:text-gray-300 transition-colors">alphabets</a></li>
             </ul>
         </nav>
+        <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
     </header>
 
     <main class="flex-grow flex flex-col items-center justify-center p-4 md:p-8 lg:p-12">
-        <h1 class="text-2xl md:text-3xl lg:text-4xl font-semibold mb-2 text-white text-center">Write Something!</h1>
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-white text-center text-shadow">Write Something</h1>
         <p class="text-lg md:text-xl lg:text-2xl mb-8 text-white text-center">
-            You can also read the alphabet <a href="#" id="alphabet-link" class="text-green-accent hover:underline">here.</a>
+            Convert text to Morse code or vice versa. View the alphabet <a href="#" id="alphabet-link" class="text-green-accent hover:underline">here</a>.
         </p>
 
-        <div class="main-content-bg rounded-lg shadow-xl w-full max-w-5xl mx-auto flex flex-col lg:flex-row p-6 md:p-8">
+        <div class="main-content-bg rounded-lg shadow-2xl w-full max-w-5xl mx-auto flex flex-col lg:flex-row p-6 md:p-8 transition-transform hover:-translate-y-1">
             <div class="lg:w-1/2 p-2 sm:p-4 flex flex-col">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800">Select Entry</h2>
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Input</h2>
                 <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-6">
-                    <button id="morse-btn" class="btn-blue active w-full sm:w-auto">Morses</button>
+                    <button id="morse-btn" class="btn-blue active w-full sm:w-auto">Morse Code</button>
                     <button id="english-btn" class="btn-blue w-full sm:w-auto">English</button>
                 </div>
                 <textarea id="input-textarea"
-                          class="flex-grow p-4 rounded-md border-2 border-gray-300 focus:outline-none focus:border-blue-500 bg-white text-gray-900 text-lg"
+                          class="flex-grow p-4 rounded-md border-2 border-gray-300 focus:outline-none focus:border-blue-500 bg-white text-gray-900 text-lg transition-all"
                           rows="10"
-                          placeholder="Type or paste your text here..."></textarea>
+                          placeholder="Type or paste your text here..."
+                          aria-label="Input text for conversion"></textarea>
+                <div class="text-sm text-gray-600 mt-2">Characters: <span id="char-count">0</span></div>
+                <div id="error-message" class="text-red-500 text-sm mt-2 hidden"></div>
+                <button id="clear-btn" class="btn-blue mt-4 w-full sm:w-auto">Clear</button>
             </div>
 
             <div class="lg:w-1/2 p-2 sm:p-4 flex flex-col mt-6 lg:mt-0 lg:ml-6 relative">
                 <h2 class="text-xl font-semibold mb-4 text-gray-800">Output</h2>
                 <textarea id="output-textarea"
-                          class="flex-grow p-4 rounded-md border-2 border-gray-300 bg-white text-gray-900 text-lg"
+                          class="flex-grow p-4 rounded-md border-2 border-gray-300 bg-white text-gray-900 text-lg transition-all"
                           rows="10"
                           readonly
-                          placeholder="Your converted text will appear here..."></textarea>
-                <button id="copy-btn" class="absolute top-6 sm:top-4 right-4 bg-gray-200 text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
-                    <i class="fas fa-copy text-lg"></i>
-                </button>
+                          placeholder="Your converted text will appear here..."
+                          aria-label="Converted output text"></textarea>
+                <div class="flex space-x-4 mt-4">
+                    <button id="copy-btn" class="bg-gray-200 text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" aria-label="Copy output text">
+                        <i class="fas fa-copy text-lg"></i>
+                    </button>
+                    <button id="play-btn" class="bg-green-500 text-white p-2 rounded-full shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" aria-label="Play Morse code audio">
+                        <i class="fas fa-play text-lg"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
 
     <footer class="header-bg py-4 text-center text-sm mt-8 shadow-inner">
-        <div class="text-xl font-bold mb-1">MORSES .:</div>
-        <div>Created by Lucifer</div>
-        <div>2025</div>
+        <div class="text-xl font-bold mb-1 text-white">MORSES .:</div>
+        <div class="text-gray-300">Created by Lucifer</div>
+        <div class="text-gray-300">2025</div>
     </footer>
 
-    <div id="alphabet-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative">
+    <div id="alphabet-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative transform transition-transform duration-300">
             <h3 class="text-2xl font-bold mb-4 text-gray-800">Morse Code Alphabet</h3>
             <pre class="whitespace-pre-wrap font-mono text-sm sm:text-base text-gray-700 bg-gray-100 p-4 rounded-md">
-A .-
-B -...
-C -.-.
-D -..
-E .
-F ..-.
-G --.
-H ....
-I ..
-J .---
-K -.-
-L .-..
-M --
-N -.
-O ---
-P .--.
-Q --.-
-R .-.
-S ...
-T -
-U ..-
-V ...-
-W .--
-X -..-
-Y -.--
+A .-    B -...  C -.-.  D -..   E .
+F ..-.  G --.   H ....  I ..    J .---
+K -.-   L .-.   M --    N -.    O ---
+P .--.  Q --.-  R .-.   S ...   T -
+U ..-   V ...-  W .--   X -..-  Y -.--
 Z --..
 
-0 -----
-1 .----
-2 ..---
-3 ...--
-4 ....-
-5 .....
-6 -....
-7 --...
-8 ---..
-9 ----.
+0 ----- 1 .---- 2 ..--- 3 ...-- 4 ....-
+5 ..... 6 -.... 7 --... 8 ---.. 9 ----.
 
-. .-.-.-
-, --..--
-? ..--..
-' .----.
-! -.-.--
-/ -..-.
-( -.--.
-) -.--.-
-& .-...
-: ---...
-; -.-.-.
-= -...-
-+ .-.-.
-- -....-
-_ ..--.-
-" .-..-.
-$ ...-..-
-@ .--.-.
+. .-.-.-  , --..--  ? ..--..  ' .----.  ! -.-.--
+/ -..-.   ( -.--.   ) -.--.-  & .-...  : ---...
+; -.-.-.  = -...-   + .-.-.   - -....-  _ ..--.-
+" .-..-.  $ ...-..- @ .--.-.
             </pre>
-            <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none">
-                &times;
+            <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none" aria-label="Close modal">
+                ×
             </button>
         </div>
     </div>
