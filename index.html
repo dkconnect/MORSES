@@ -3,60 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MORSES ::</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>MORSES .: Decoder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header class="navbar">
-        <div class="logo">MORSES ::</div>
+<body class="flex flex-col min-h-screen">
+
+    <header class="header-bg py-4 px-6 md:px-12 flex justify-between items-center shadow-lg">
+        <div class="text-3xl font-bold">MORSES ::</div>
         <nav>
-            <ul>
-                <li><a href="index.html" class="active">Decoder</a></li>
-                <li><a href="history.html">History of Morse</a></li>
-                <li><a href="alphabets.html">Alphabets</a></li>
+            <ul class="flex space-x-6 md:space-x-8 text-lg font-medium">
+                <li><a href="#" class="text-green-accent">decoder</a></li>
+                <li><a href="#" class="text-white hover:text-gray-300">history of morse</a></li>
+                <li><a href="#" class="text-white hover:text-gray-300">alphabets</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="content-section">
-        <div class="title-text">
-            <h1>Write Something!</h1>
-            <p>You can also read the alphabet <a href="alphabets.html" class="green-link">here</a>.</p>
-        </div>
+    <main class="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-semibold mb-2 text-white text-center">Write Something!</h1>
+        <p class="text-lg md:text-xl mb-8 text-white text-center">
+            You can also read the alphabet <a href="#" id="alphabet-link" class="text-green-accent hover:underline">here.</a>
+        </p>
 
-        <div class="main-container">
-            <div class="input-section">
-                <div class="button-group">
-                    <button class="select-button blue-button active" data-mode="morse" aria-label="Morse to English">Morse</button>
-                    <button class="select-button blue-button" data-mode="english" aria-label="English to Morse">English</button>
+        <div class="main-content-bg rounded-lg shadow-xl w-full max-w-5xl mx-auto flex flex-col lg:flex-row p-6 md:p-8">
+            <div class="lg:w-1/2 p-4 flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Select Entry</h2>
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-6">
+                    <button id="morse-btn" class="btn-blue active">Morses</button>
+                    <button id="english-btn" class="btn-blue">English</button>
                 </div>
-                <textarea id="inputText" placeholder="Enter Morse code (e.g., .... . .-.. .-.. ---)" aria-label="Input text for conversion"></textarea>
+                <textarea id="input-textarea"
+                          class="flex-grow p-4 rounded-md border-2 border-gray-300 focus:outline-none focus:border-blue-500 bg-white text-gray-900 text-lg"
+                          rows="10"
+                          placeholder="Type or paste your text here..."></textarea>
             </div>
-            <div class="output-section">
-                <span class="output-label">Output</span>
-                <button class="copy-button" aria-label="Copy output text">
-                    <svg class="copy-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                    </svg>
-                    Copy
+
+            <div class="lg:w-1/2 p-4 flex flex-col mt-6 lg:mt-0 lg:ml-6 relative">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Output</h2>
+                <textarea id="output-textarea"
+                          class="flex-grow p-4 rounded-md border-2 border-gray-300 bg-white text-gray-900 text-lg"
+                          rows="10"
+                          readonly
+                          placeholder="Your converted text will appear here..."></textarea>
+                <button id="copy-btn" class="absolute top-4 right-4 bg-gray-200 text-gray-700 p-2 rounded-full shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    <i class="fas fa-copy text-lg"></i>
                 </button>
-                <textarea id="outputText" readonly aria-label="Converted output text"></textarea>
             </div>
         </div>
-        <div class="toast" id="toast"></div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-logo">MORSES ::</div>
-        <div class="repository-button">
-            <button onclick="window.open('https://github.com)">
-                Repository
+    <footer class="header-bg py-4 text-center text-sm mt-8 shadow-inner">
+        <div class="text-xl font-bold mb-1">MORSES .:</div>
+        <div>Created by Lucifer</div>
+        <div>2025</div>
+    </footer>
+
+    <div id="alphabet-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Morse Code Alphabet</h3>
+            <pre class="whitespace-pre-wrap font-mono text-sm text-gray-700 bg-gray-100 p-4 rounded-md">
+A .-
+B -...
+C -.-.
+D -..
+E .
+F ..-.
+G --.
+H ....
+I ..
+J .---
+K -.-
+L .-..
+M --
+N -.
+O ---
+P .--.
+Q --.-
+R .-.
+S ...
+T -
+U ..-
+V ...-
+W .--
+X -..-
+Y -.--
+Z --..
+
+0 -----
+1 .----
+2 ..---
+3 ...--
+4 ....-
+5 .....
+6 -....
+7 --...
+8 ---..
+9 ----.
+
+. .-.-.-
+, --..--
+? ..--..
+' .----.
+! -.-.--
+/ -..-.
+( -.--.
+) -.--.-
+& .-...
+: ---...
+; -.-.-.
+= -...-
++ .-.-.
+- -....-
+_ ..--.-
+" .-..-.
+$ ...-..-
+@ .--.-.
+            </pre>
+            <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-3xl font-bold leading-none">
+                &times;
             </button>
         </div>
-        <p>Created by Lucifer</p>
-        <p>2025</p>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
