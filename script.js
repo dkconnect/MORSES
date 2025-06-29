@@ -32,7 +32,19 @@ const charCount = document.getElementById('char-count');
 const errorMessage = document.getElementById('error-message');
 const themeToggle = document.getElementById('theme-toggle');
 
-let currentMode = 'morse';
+const copyMessage = document.createElement('span');
+copyMessage.id = 'copy-message';
+copyMessage.className = 'absolute -top-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 pointer-events-none';
+copyMessage.textContent = 'Copied!';
+copyBtn.parentNode.insertBefore(copyMessage, copyBtn.nextSibling); 
+
+let currentMode = 'morse'; 
+let audioContext = null;
+let audioPlaying = false;
+let currentMorseAudioQueue = []; 
+let audioQueueIndex = 0;
+let audioHighlightTimeout = null; 
+let currentAudioNode = null; 
 
 themeToggle.addEventListener('click', () => {
     const body = document.body;
@@ -55,18 +67,48 @@ function updateButtonState() {
         morseBtn.classList.add('opacity-70');
         inputTextArea.placeholder = "Enter English text (e.g., HELLO)";
     }
-    outputTextArea.value = '';
     inputTextArea.value = '';
+    outputTextArea.innerHTML = ''; 
+    outputTextArea.value = ''; 
     errorMessage.classList.add('hidden');
     charCount.textContent = '0';
+    stopMorseAudio(); 
 }
 
 function englishToMorse(text) {
-    if (!text) return '';
-    return text.toUpperCase().split('').map(char => {
-        if (char === ' ') return '/';
-        return morseCodeMap[char] || '';
-    }).join(' ').trim();
+    if (!text) return { morseString: '', morseHtml: '', rawMorse: [] };
+    let resultString = []; 
+    let resultHtml = []; 
+    let rawMorseElements = []; 
+    let unsupportedChars = new Set();
+
+    text.toUpperCase().split('').forEach(char => {
+        if (char === ' ') {
+            resultString.push('/'); 
+            resultHtml.push('<span class="morse-word-space">/</span>');
+            rawMorseElements.push({ type: 'wordSpace', value: '/' });
+        } else if (morseCodeMap[char]) {
+            const morseChar = morseCodeMap[char];
+            resultString.push(morseChar);
+            resultHtml.push(`<span class="morse-char">${morseChar.split('').map(bit => `<span class="morse-bit">${bit}</span>`).join('')}</span>`);
+            rawMorseElements.push({ type: 'char', value: morseChar });
+        } else {
+            unsupportedChars.add(char);
+        }
+    });
+
+    if (unsupportedChars.size > 0) {
+        errorMessage.textContent = `Note: Some characters could not be converted: ${Array.from(unsupportedChars).join(', ')}`;
+        errorMessage.classList.remove('hidden');
+    } else {
+        errorMessage.classList.add('hidden');
+    }
+
+    return {
+        morseString: resultString.join(' ').trim(),
+        morseHtml: resultHtml.join(' ').trim(),
+        rawMorse: rawMorseElements
+    };
 }
 
 function morseToEnglish(morse) {
@@ -84,92 +126,176 @@ function morseToEnglish(morse) {
     return words.join(' ').trim();
 }
 
+function stopMorseAudio() {
+    if (audioContext && audioPlaying) {
+        if (currentAudioNode) {
+            currentAudioNode.stop();
+            currentAudioNode.disconnect();
+            currentAudioNode = null;
+        }
+        audioContext.close(); 
+        audioContext = null;
+        audioPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play text-lg"></i>';
+        clearAudioHighlights();
+    }
+    if (audioHighlightTimeout) {
+        clearTimeout(audioHighlightTimeout);
+        audioHighlightTimeout = null;
+    }
+}
+
+function clearAudioHighlights() {
+    const highlightedElements = outputTextArea.querySelectorAll('.morse-highlight');
+    highlightedElements.forEach(el => el.classList.remove('morse-highlight'));
+}
+
+function playNextAudioElement() {
+    if (!audioPlaying || audioQueueIndex >= currentMorseAudioQueue.length || !audioContext) {
+        stopMorseAudio();
+        return;
+    }
+
+    clearAudioHighlights(); 
+
+    const currentElement = currentMorseAudioQueue[audioQueueIndex];
+    const dotDuration = 100; 
+    const dashDuration = dotDuration * 3;
+    const interElementGap = dotDuration; 
+    const interCharacterGap = dotDuration * 3; 
+    const wordGap = dotDuration * 7;
+
+    let timeToScheduleNext = audioContext.currentTime;
+    const outputSpans = outputTextArea.querySelectorAll('.morse-char, .morse-word-space');
+    if (outputSpans[audioQueueIndex]) {
+        outputSpans[audioQueueIndex].classList.add('morse-highlight');
+    }
+
+    if (currentElement.type === 'char') {
+        const morseBits = currentElement.value.split('');
+        morseBits.forEach((bit, bitIndex) => {
+            currentAudioNode = audioContext.createOscillator();
+            currentAudioNode.type = 'sine';
+            currentAudioNode.frequency.setValueAtTime(600, timeToScheduleNext);
+            currentAudioNode.connect(audioContext.destination);
+
+            if (bit === '.') {
+                currentAudioNode.start(timeToScheduleNext);
+                currentAudioNode.stop(timeToScheduleNext + dotDuration / 1000);
+                timeToScheduleNext += dotDuration / 1000;
+            } else if (bit === '-') {
+                currentAudioNode.start(timeToScheduleNext);
+                currentAudioNode.stop(timeToScheduleNext + dashDuration / 1000);
+                timeToScheduleNext += dashDuration / 1000;
+            }
+            if (bitIndex < morseBits.length - 1) { 
+                timeToScheduleNext += interElementGap / 1000;
+            }
+        });
+        timeToScheduleNext += (interCharacterGap - interElementGap) / 1000; 
+    } else if (currentElement.type === 'wordSpace') {
+        timeToScheduleNext += wordGap / 1000;
+    }
+
+    audioQueueIndex++;
+    audioHighlightTimeout = setTimeout(playNextAudioElement, (timeToScheduleNext - audioContext.currentTime) * 1000);
+}
+
+function startMorseAudio(rawMorseElements) {
+    stopMorseAudio(); 
+
+    if (!rawMorseElements || rawMorseElements.length === 0) {
+        return;
+    }
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioPlaying = true;
+    currentMorseAudioQueue = rawMorseElements;
+    audioQueueIndex = 0;
+    playBtn.innerHTML = '<i class="fas fa-pause text-lg"></i>'; 
+    playNextAudioElement(); 
+}
+
 let debounceTimeout;
 function handleDebouncedInput() {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         const inputText = inputTextArea.value.trim();
         charCount.textContent = inputText.length;
+        stopMorseAudio(); 
+        clearAudioHighlights(); 
         if (currentMode === 'english') {
-            outputTextArea.value = englishToMorse(inputText);
+            const { morseString, morseHtml, rawMorse } = englishToMorse(inputText);
+            outputTextArea.value = morseString; 
+            outputTextArea.innerHTML = morseHtml;
+            currentMorseAudioQueue = rawMorse; 
         } else {
-            outputTextArea.value = morseToEnglish(inputText);
+            const convertedText = morseToEnglish(inputText);
+            outputTextArea.value = convertedText;
+            outputTextArea.innerHTML = convertedText; 
+            currentMorseAudioQueue = inputText.split(' ').filter(e => e !== '').map(e => ({
+                type: e === '/' ? 'wordSpace' : 'char',
+                value: e
+            }));
+            if(inputText === '') currentMorseAudioQueue = []; 
         }
+
         outputTextArea.classList.add('animate-pulse');
         setTimeout(() => outputTextArea.classList.remove('animate-pulse'), 300);
     }, 300);
 }
 
-function playMorseAudio(morse) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const dotDuration = 100; // ms
-    const dashDuration = dotDuration * 3;
-    const gapDuration = dotDuration;
-    let time = ctx.currentTime;
-
-    morse.split('').forEach(char => {
-        if (char === '.') {
-            const oscillator = ctx.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(600, time);
-            oscillator.connect(ctx.destination);
-            oscillator.start(time);
-            oscillator.stop(time + dotDuration / 1000);
-            time += (dotDuration + gapDuration) / 1000;
-        } else if (char === '-') {
-            const oscillator = ctx.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(600, time);
-            oscillator.connect(ctx.destination);
-            oscillator.start(time);
-            oscillator.stop(time + dashDuration / 1000);
-            time += (dashDuration + gapDuration) / 1000;
-        } else if (char === ' ') {
-            time += gapDuration / 1000;
-        } else if (char === '/') {
-            time += (gapDuration * 3) / 1000;
-        }
-    });
-}
-
 morseBtn.addEventListener('click', () => {
     currentMode = 'morse';
     updateButtonState();
-    handleDebouncedInput();
+    handleDebouncedInput(); 
 });
 
 englishBtn.addEventListener('click', () => {
     currentMode = 'english';
     updateButtonState();
-    handleDebouncedInput();
+    handleDebouncedInput(); 
 });
 
 inputTextArea.addEventListener('input', handleDebouncedInput);
 
-copyBtn.addEventListener('click', () => {
-    outputTextArea.select();
-    document.execCommand('copy');
-    copyBtn.innerHTML = '<i class="fas fa-check text-green-500"></i>';
-    copyBtn.classList.add('animate-bounce');
-    setTimeout(() => {
-        copyBtn.innerHTML = '<i class="fas fa-copy text-lg"></i>';
-        copyBtn.classList.remove('animate-bounce');
-    }, 1500);
+copyBtn.addEventListener('click', async () => {
+    try {
+        await navigator.clipboard.writeText(outputTextArea.value);
+        copyBtn.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+        copyBtn.classList.add('animate-bounce');
+
+        copyMessage.classList.add('opacity-100');
+        copyMessage.classList.remove('opacity-0');
+
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+    } finally {
+        setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fas fa-copy text-lg"></i>';
+            copyBtn.classList.remove('animate-bounce');
+            copyMessage.classList.remove('opacity-100');
+            copyMessage.classList.add('opacity-0');
+        }, 1500);
+    }
 });
 
 playBtn.addEventListener('click', () => {
-    if (currentMode === 'english' && outputTextArea.value) {
-        playMorseAudio(outputTextArea.value);
-    } else if (currentMode === 'morse' && inputTextArea.value) {
-        playMorseAudio(inputTextArea.value);
+    if (audioPlaying) {
+        stopMorseAudio(); 
+    } else {
+        startMorseAudio(currentMorseAudioQueue);
     }
 });
 
 clearBtn.addEventListener('click', () => {
     inputTextArea.value = '';
-    outputTextArea.value = '';
+    outputTextArea.innerHTML = ''; 
+    outputTextArea.value = ''; 
     charCount.textContent = '0';
     errorMessage.classList.add('hidden');
+    stopMorseAudio(); 
+    clearAudioHighlights(); 
 });
 
 alphabetLink.addEventListener('click', (e) => {
