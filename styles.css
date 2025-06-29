@@ -4,19 +4,31 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    color: white;
+    color: white; 
     transition: background 0.3s, color 0.3s;
 }
 
 body[data-theme="light"] {
     background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    color: #1f2937;
+    color: #1f2937; 
 }
 
 body[data-theme="light"] .header-bg,
 body[data-theme="light"] .main-content-bg,
 body[data-theme="light"] footer {
     background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+}
+
+body[data-theme="light"] .header-bg .text-white,
+body[data-theme="light"] .header-bg a.text-white,
+body[data-theme="light"] footer .text-white,
+body[data-theme="light"] main h1.text-white,
+body[data-theme="light"] main p.text-white {
+    color: #1f2937;
+}
+
+body[data-theme="light"] .text-green-accent {
+    color: #16a34a; 
 }
 
 body[data-theme="light"] .main-content-bg h2,
@@ -98,6 +110,31 @@ textarea:focus {
     transform: scale(0.9);
 }
 
+.morse-highlight {
+    background-color: rgba(74, 222, 128, 0.4); 
+    border-radius: 2px;
+    padding: 0 1px;
+    transition: background-color 0.1s ease-in-out; 
+}
+
+#copy-message {
+    position: absolute;
+    top: -24px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #374151; 
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem; 
+    border-radius: 0.25rem; 
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; 
+    white-space: nowrap;
+    z-index: 10; 
+}
+
+
 @media (max-width: 639px) {
     .header-bg {
         flex-direction: column;
@@ -115,8 +152,5 @@ textarea:focus {
     .btn-blue {
         padding: 0.6rem 1.2rem;
     }
-    #copy-btn, #play-btn {
-        top: 1rem;
-        right: 1rem;
-    }
+
 }
