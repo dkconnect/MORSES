@@ -1,43 +1,104 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #2e2e2e;
+    background: linear-gradient(135deg, #2e2e2e 0%, #1a1a1a 100%);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     color: white;
+    transition: background 0.3s, color 0.3s;
 }
+
+body[data-theme="light"] {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #1f2937;
+}
+
+body[data-theme="light"] .header-bg,
+body[data-theme="light"] .main-content-bg,
+body[data-theme="light"] footer {
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+}
+
+body[data-theme="light"] .main-content-bg h2,
+body[data-theme="light"] .main-content-bg textarea {
+    color: #1f2937;
+}
+
 .header-bg {
-    background-color: #2e2e2e;
+    background: linear-gradient(135deg, #2e2e2e 0%, #374151 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
+
 .main-content-bg {
-    background-color: #d1d5db;
+    background: linear-gradient(135deg, #d1d5db 0%, #e5e7eb 100%);
+    transition: transform 0.3s, background 0.3s;
 }
+
+.main-content-bg:hover {
+    transform: translateY(-4px);
+}
+
 .btn-blue {
     background-color: #3b82f6;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 9999px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
 }
+
 .btn-blue:hover {
     background-color: #2563eb;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
 .btn-blue.active {
     background-color: #1d4ed8;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
 }
+
 .btn-blue.opacity-70 {
     opacity: 0.7;
 }
+
 .text-green-accent {
     color: #4ade80;
 }
+
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 textarea {
     resize: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
-/* New CSS for smaller screens */
-@media (max-width: 639px) { /* Tailwind's 'sm' breakpoint is 640px, so this targets anything smaller */
+
+textarea:focus {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+#alphabet-modal:not(.hidden) {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#alphabet-modal.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+#alphabet-modal > div {
+    transform: scale(1);
+}
+
+#alphabet-modal.hidden > div {
+    transform: scale(0.9);
+}
+
+@media (max-width: 639px) {
     .header-bg {
         flex-direction: column;
         align-items: center;
@@ -46,16 +107,16 @@ textarea {
         margin-top: 1rem;
     }
     .main-content-bg {
-        padding: 1rem; /* Adjust padding for very small screens */
+        padding: 1rem;
     }
-    .main-content-bg > div { /* Apply padding to direct children of main-content-bg */
+    .main-content-bg > div {
         padding: 0.5rem;
     }
     .btn-blue {
         padding: 0.6rem 1.2rem;
     }
-    #copy-btn {
-        top: 1rem; /* Adjust position for copy button on small screens */
+    #copy-btn, #play-btn {
+        top: 1rem;
         right: 1rem;
     }
 }
