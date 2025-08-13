@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History of Morse Code .:</title>
+    <link rel="icon" type="image/png" href="_.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="flex flex-col min-h-screen transition-colors duration-300" data-theme="dark">
+
+    <header class="header-bg py-4 px-4 md:px-8 lg:px-12 flex justify-between items-center shadow-lg flex-wrap">
+        <div class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0 text-white">MORSES .:</div>
+        <nav>
+            <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6 md:space-x-8 text-base sm:text-lg font-medium">
+                <li><a href="index.html" class="text-white hover:text-gray-300 transition-colors">decoder</a></li>
+                <li><a href="history.html" class="text-green-accent hover:text-green-300 transition-colors">history of morse</a></li>
+            </ul>
+        </nav>
+        <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center p-4 md:p-8 lg:p-12">
+        <div class="main-content-bg rounded-lg shadow-2xl w-full max-w-5xl mx-auto p-6 md:p-8 transition-transform hover:-translate-y-1">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-center text-gray-800">History of Morse Code .:</h1>
+            
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Pre-Morse Telegraphs</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Early 19th-century European experiments with electrical signaling systems led to the development of electromagnetic telegraphy. In 1820, Hans Christian Ørsted discovered electromagnetism, and in 1824, William Sturgeon invented the electromagnet. These discoveries paved the way for systems that sent electric pulses along wires to control a receiving electromagnet. Early systems, such as the single-needle telegraph, were simple but slow. William Cooke and Charles Wheatstone developed the first commercial electrical telegraph in Britain in 1837. Others, like Carl Friedrich Gauss and Wilhelm Eduard Weber, also created codes for their telegraph systems.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Samuel Morse and the Creation of Morse Code</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    The American artist Samuel Morse, physicist Joseph Henry, and engineer Alfred Vail developed their own electrical telegraph system. Morse originally planned to transmit only numbers, but Vail expanded the code in 1840 to include letters and special characters based on their frequency in the English language. This early version became known as American Morse code and was first used in 1844. 
+                </p>
+                <div class="flex justify-center my-6">
+                    <img src="image_133192.png" alt="A vintage Morse telegraph key on a wooden base." class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                <p class="text-gray-700 leading-relaxed">
+                    The Morse system originally made indentations on paper tape, but operators quickly learned to interpret the clicks of the receiver's armature directly, making the paper tape obsolete.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Evolution to International Morse Code</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    The modern International Morse Code is based on an improved version proposed by Friedrich Gerke in 1848. Gerke simplified the code by removing different-length dashes and inter-element spaces, leaving only dots and dashes. His code was adopted in Germany and Austria in 1851. In 1865, the International Telegraphy Congress in Paris standardized the code. This new standard, which adopted most of Gerke's codepoints, became the widely used International Morse code, while American Morse code was primarily used for land-line telegraphy in the United States and Canada.
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3">Modern and Historical Uses</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    Morse code played a crucial role in communication before voice-capable radio transmitters were common, especially for:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 leading-relaxed pl-4">
+                    <li>Radiotelegraphy: Used for high-speed international communication on telegraph lines, undersea cables, and radio circuits in the late 19th and early 20th centuries. It was vital for military communication, particularly for ships and long-range patrol planes during World War II.</li>
+                    <li>Aviation: Beginning in the 1920s, pilots used Morse code to identify navigational beacons. The identifiers are still shown on aeronautical charts today.</li>
+                </ul>
+                <div class="flex justify-center my-6">
+                    <img src="image_1331ad.png" alt="An aeronautical chart showing a VOR-DME station identifier with its Morse code sequence." class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                <p class="text-gray-700 leading-relaxed">
+                    <ul class="list-disc list-inside text-gray-700 leading-relaxed pl-4">
+                        <li>Maritime Distress: Morse code was the international standard for maritime distress calls until 1999, with the famous SOS signal ("di-di-di-dah-dah-dah-di-di-dit") being a key part of this system.</li>
+                    </ul>
+                </p>
+                <p class="text-gray-700 leading-relaxed mt-4">
+                    While commercial use of Morse code has largely ceased, it remains popular among amateur radio operators. It is still used for various purposes, including radio navigation aids and satellite transmissions for identification, assistive technology for people with severe motion disabilities, and signaling for help by flashing a light or making a sound. The Federal Communications Commission (FCC) in the U.S. no longer requires Morse code proficiency for amateur radio licenses, a change made in 2007. However, the skill is still valued and practiced by enthusiasts. The all-time record for copying Morse code was set by Theodore Roosevelt McElroy in 1939 at 75.2 words per minute.
+                </p>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="header-bg py-4 text-center text-sm mt-8 shadow-inner">
+        <div class="text-xl font-bold mb-1 text-white">MORSES .:</div>
+        <div class="text-gray-300">Created by Lucifer</div>
+        <div class="text-gray-300">2025</div>
+    </footer>
+
+    <script src="script.js"></script> 
+</body>
+</html>
